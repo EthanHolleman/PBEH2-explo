@@ -45,7 +45,10 @@ def determine_treatment_phrase(row, ssb_experiment=False):
         elif row['Post-SSB'] == '+':
             phrase.append('Post-SSB')
         else:
-            pharse.append('No SSB')
+            phrase.append('No SSB')
+        
+        if row['Linearization post txn'] == '+':
+            phrase.append('Cut post txn')
     
     if row.Txn == '+':  # sample was transcribed
         if row.RnaseH == '+':

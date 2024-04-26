@@ -7,6 +7,7 @@ BED_SAMPLES = pd.read_csv(
 NTBSPQI_SAMPLES = BED_SAMPLES.loc[BED_SAMPLES.sample_id.isin(set(range(0, 18)))]
 VR20F_SAMPLES = BED_SAMPLES.loc[BED_SAMPLES.sample_id.isin(set(range(30, 36)))]
 NTBSPQI_SSB_SAMPLES = BED_SAMPLES.loc[BED_SAMPLES.sample_id.isin(set(range(18, 30)))]
+SSB_STBL_SAMPLES = BED_SAMPLES.loc[BED_SAMPLES.sample_id.isin(set(range(73, 81)))]
 
 
 rule calculate_base_conversion_freq:
@@ -87,6 +88,24 @@ rule merge_NT_SSB_experiments:
         "../scripts/concat_tsvs.py"
 
 
+rule merge_SSB_STBL_experiments:
+    conda:
+        "../envs/py.yml"
+    input:
+        tsvs=expand(
+            "output/bedData/basepairConversionFreqSampleLabels/PBEH2-{sample_id}_Plasmid_{plasmid}_Strand_{strand}_call_{call_type}.conversion.freq.label.tsv",
+            zip,
+            sample_id=SSB_STBL_SAMPLES.sample_id,
+            plasmid=SSB_STBL_SAMPLES.plasmid,
+            strand=SSB_STBL_SAMPLES.strand,
+            call_type=SSB_STBL_SAMPLES.call_type,
+        ),
+    output:
+        out="output/bedData/mergedExperiments/SSB.STBL.samples.tsv",
+    script:
+        "../scripts/concat_tsvs.py"
+
+
 rule add_ntbspqI_experiment_sample_labels:
     conda:
         "../envs/py.yml"
@@ -116,6 +135,17 @@ rule add_nt_ssb_experiment_sample_labels:
         tsv="output/bedData/mergedExperiments/Nt.BspQI.SSB.samples.tsv",
     output:
         out="output/bedData/mergedExperiments/Nt.BspQI.SSB.samples.named.tsv",
+    script:
+        "../scripts/add_sample_type.py"
+
+
+rule add_SSB_STBL_experiment_sample_labels:
+    conda:
+        "../envs/py.yml"
+    input:
+        tsv="output/bedData/mergedExperiments/SSB.STBL.samples.tsv",
+    output:
+        out="output/bedData/mergedExperiments/SSB.STBL.samples.named.tsv",
     script:
         "../scripts/add_sample_type.py"
 
@@ -162,6 +192,17 @@ rule plot_NT_SSB_experiments:
         out="output/plots/Nt.BspQI.SSB.experiment.freq.plots.pdf",
     script:
         "../scripts/plots/plot.nt.ssb.R"
+
+
+rule plot_SSB_STBLE_experiments:
+    conda:
+        "../envs/R.yml"
+    input:
+        tsv="output/bedData/mergedExperiments/SSB.STBL.samples.named.tsv",
+    output:
+        out="output/plots/SSB.STBL.experiment.freq.plots.pdf",
+    script:
+        "../scripts/plots/plot.ssb.stbl.R"
 
 
 rule add_treatments_to_sample_groups_table:
