@@ -1,0 +1,11 @@
+import pandas as pd
+
+include: 'rules/bedFiles.smk'
+
+rule all:
+    input:
+        'output/plots/Nt.BspQI.experiment.freq.plots.pdf',
+        'output/plots/VR20F.experiment.freq.plots.pdf',
+        'output/plots/read.counts.pdf',
+        'output/bedData/mergedExperiments/Nt.BspQI.SSB.samples.named.tsv',
+        'output/plots/Nt.BspQI.SSB.experiment.freq.plots.pdf'
