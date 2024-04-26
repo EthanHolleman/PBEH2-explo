@@ -6,3 +6,7 @@ output/
 *.pyc
 *.err
 *.out
+
+# ignore large collections of resource files
+resources/mergedBed
+resource/mergedFiles
