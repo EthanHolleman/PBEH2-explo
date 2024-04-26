@@ -9,4 +9,4 @@ output/
 
 # ignore large collections of resource files
 resources/mergedBed
-resource/mergedFiles
+resources/mergedFiles
